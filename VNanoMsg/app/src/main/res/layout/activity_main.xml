@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/btnPAIR"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PAIR模式通讯" />
+
+    <Button
+        android:layout_marginTop="8dp"
+        android:id="@+id/btnBUS"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="BUS模式通讯" />
+
+    <Button
+        android:layout_marginTop="8dp"
+        android:id="@+id/btnREQREP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="REQREP模式通讯" />
+
+    <Button
+        android:layout_marginTop="8dp"
+        android:id="@+id/btnPUBSUB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PUBSUB模式通讯" />
+
+    <Button
+        android:layout_marginTop="8dp"
+        android:id="@+id/btnSURVEY"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SURVEY模式通讯" />
+
+</LinearLayout>
