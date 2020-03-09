@@ -11,10 +11,13 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:largeHeap="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".mvp.view.PipePullActivity" />
+        <activity android:name=".mvvm.view.PipePushActivity" />
         <activity android:name=".SURVEYActivity" />
         <activity android:name=".PUBSUBActivity" />
-        <activity android:name=".REQREPActivity" />
+        <activity android:name=".mvp.view.REQREPActivity" />
         <activity android:name=".BUSActivity" />
         <activity android:name=".PAIRActivity" />
         <activity android:name=".MainActivity">
@@ -25,6 +28,5 @@
             </intent-filter>
         </activity>
     </application>
-
 
 </manifest>

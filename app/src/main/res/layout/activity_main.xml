@@ -42,4 +42,19 @@
         android:layout_height="wrap_content"
         android:text="SURVEY模式通讯" />
 
+    <Button
+        android:layout_marginTop="8dp"
+        android:id="@+id/btnPIPELinePush"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PipeLinePush模式通讯" />
+
+
+    <Button
+        android:layout_marginTop="8dp"
+        android:id="@+id/btnPIPELinePull"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PipeLinePull模式通讯" />
+
 </LinearLayout>

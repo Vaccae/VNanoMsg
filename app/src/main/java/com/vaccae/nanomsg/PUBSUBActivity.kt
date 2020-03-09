@@ -46,8 +46,7 @@ class PUBSUBActivity : AppCompatActivity() {
                     try {
                         val byteArray = it?.recvbyte()
                         if (byteArray != null) {
-
-                            val recvmsg = byteArray?.toString(charset = Charsets.UTF_8)
+                            val recvmsg = byteArray.toString(charset = Charsets.UTF_8)
                             runOnUiThread {
                                 tvmsg.append(recvmsg + "\r\n")
                             }

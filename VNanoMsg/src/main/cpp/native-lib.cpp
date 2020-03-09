@@ -2,6 +2,7 @@
 #include <string>
 #include <stdio.h>
 #include <android/log.h>
+#include "utils/utils.h"
 #include "src/nn.h"
 #include "src/pair.h"
 #include "src/protocol.h"
@@ -9,6 +10,7 @@
 #include "src/reqrep.h"
 #include "src/pubsub.h"
 #include "src/survey.h"
+#include "src/pipeline.h"
 
 // log标签
 #define  TAG    "NanoErrInfo"
@@ -22,35 +24,6 @@
 //抛异常类标签
 #define ERRCLS "java/lang/IllegalArgumentException"
 
-//抛异常函数
-void throwByName(JNIEnv *env, const char *name, const char *msg) {
-    jclass cls = env->FindClass(name);
-    if (cls != NULL) {
-        //检测是否有异常发生
-        if (0 != env->ExceptionOccurred()) {
-            //清除异常堆栈
-            env->ExceptionClear();
-        }
-        env->ThrowNew(cls, msg);
-    }
-    env->DeleteLocalRef(cls);
-}
-
-//JByteArray转为PChar
-char *jbyteArrTopChar(JNIEnv *env, jbyteArray array, int len) {
-    char *buf = new char[len];
-    env->GetByteArrayRegion(array, 0, len, reinterpret_cast<jbyte *>(buf));
-    return buf;
-}
-
-//pchar转为jbyteArray
-jbyteArray pCharTojbyteArr(JNIEnv *env, char *buf, int len) {
-    jbyteArray array = env->NewByteArray(len);
-    env->SetByteArrayRegion(array, 0, len, reinterpret_cast<jbyte *>(buf));
-    return array;
-}
-
-
 //获取NanoMsg连接类型
 int getNanotype(const char *ntype) {
     if (strcmp(ntype, "PAIR") == 0) {
@@ -63,6 +36,10 @@ int getNanotype(const char *ntype) {
         return NN_SUB;
     } else if (strcmp(ntype, "SURVEY") == 0) {
         return NN_RESPONDENT;
+    } else if (strcmp(ntype, "PIPEPUSH") == 0) {
+        return NN_PUSH;
+    } else if (strcmp(ntype, "PIPEPULL") == 0) {
+        return NN_PULL;
     } else {
         return -1;
     }
@@ -96,7 +73,7 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_init(
         char errmsg[100];
         sprintf(errmsg, "创建Socket连接失败，返回码：%d", e);
         LOGE("%s\n", errmsg);
-        throwByName(env, ERRCLS, errmsg);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     //释放资源
     env->ReleaseStringUTFChars(ntype_, ntype);
@@ -113,18 +90,9 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_bind(
     int bindsocket = -1;
 
     //获取地址
-//    const char *ipadress = env->GetStringUTFChars(ipadr_, 0);
-//    const char *ipadrpre = "tcp://";
-//
-//    int len = strlen(ipadress) + strlen(ipadrpre);
-//    char ipstr[len];
-//    strcpy(ipstr, ipadrpre);
-//    strcat(ipstr, ipadress);
-
-    //获取地址
     //取消了加入TCP的参数，在外面直接赋值
-    const char *ipadress = env->GetStringUTFChars(ipadr_, 0);
-
+//    const char *ipadress = env->GetStringUTFChars(ipadr_, 0);
+    const char *ipadress = utils::jstringTochar(env, ipadr_);
 
     try {
         //绑定地址
@@ -136,10 +104,10 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_bind(
         char errmsg[100];
         sprintf(errmsg, "绑定地址失败，返回码：%d", e);
         LOGE("%s\n", errmsg);
-        throwByName(env, ERRCLS, errmsg);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     //释放资源
-    env->ReleaseStringUTFChars(ipadr_, ipadress);
+//    env->ReleaseStringUTFChars(ipadr_, ipadress);
 
     return bindsocket;
 }
@@ -162,7 +130,7 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_close(
         char errmsg[100];
         sprintf(errmsg, "关闭套接字失败，返回码：%d", e);
         LOGE("%s\n", errmsg);
-        throwByName(env, ERRCLS, errmsg);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     return closesocket;
 }
@@ -189,7 +157,7 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_connect(
         char errmsg[100];
         sprintf(errmsg, "连接服务器失败，返回码：%d", e);
         LOGE("%s\n", errmsg);
-        throwByName(env, ERRCLS, errmsg);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     //释放资源
     env->ReleaseStringUTFChars(ipadr_, ipadress);
@@ -212,7 +180,7 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_send(
         //计算发送字节长度
         int str_len = strlen(sendmsg);
         //发送数据
-        count = nn_send(socketid_, sendmsg, static_cast<size_t>(str_len), 0);
+        count = nn_send(socketid_, sendmsg, str_len, 0);
         if (count < 0) {
             throw count;
         }
@@ -220,7 +188,7 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_send(
         char errmsg[100];
         sprintf(errmsg, "程序发送数据失败！返回码：%d", e);
         LOGE("%s\n", errmsg);
-        throwByName(env, ERRCLS, errmsg);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     //释放资源
     env->ReleaseStringUTFChars(sendmsg_, sendmsg);
@@ -240,11 +208,11 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_sendbyte(
     int bytelen = env->GetArrayLength(sendbyte_);
 
     //获取发送字符串
-    const char *sendmsg = jbyteArrTopChar(env, sendbyte_, bytelen);
+    const char *sendmsg = utils::jbyteArrTopChar(env, sendbyte_, bytelen);
     try {
 
         //发送数据
-        count = nn_send(socketid_, sendmsg, static_cast<size_t>(bytelen), 0);
+        count = nn_send(socketid_, sendmsg, bytelen, 0);
         if (count < 0) {
             throw count;
         }
@@ -252,7 +220,7 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_sendbyte(
         char errmsg[100];
         sprintf(errmsg, "程序发送数据失败！返回码：%d", e);
         LOGE("%s\n", errmsg);
-        throwByName(env, ERRCLS, errmsg);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     return count;
 }
@@ -274,9 +242,17 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_recv(
             return recvmsg;
         } else {
             //接上数据按接收长度重新生成char，防止出现多一个字符情况
-            char *recvbuf = new char[nbytes];
-            memcpy(recvbuf, (char *) buf, static_cast<size_t>(nbytes));
-            recvmsg = env->NewStringUTF(recvbuf);
+            //将定义的指针改为char数组，多次测试后现的用指针后获取的数据会有问题
+            char recvbuf[nbytes + 1];
+            //最后一位变为字符串结束符，如果不多定义一位最后为\0结束，转为字符串就会有问题
+            recvbuf[nbytes] = '\0';
+
+            memcpy(&recvbuf, (char *)buf, nbytes);
+            LOGD("res:%d,%s", nbytes, (char *) buf);
+            LOGD("new:%d,%s", nbytes, recvbuf);
+            //将NewStringUTF改为调用JAVA的方式，防止转为字符串时的乱字符后系统崩溃
+//            recvmsg = env->NewStringUTF(recvbuf);
+            recvmsg = utils::chartoJstring(env, recvbuf);
             int rc = nn_freemsg(buf);
             if (rc != 0) {
                 throw rc;
@@ -286,7 +262,7 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_recv(
         char errmsg[100];
         sprintf(errmsg, "接收数据失败！返回码：%d", e);
         LOGE("%s\n", errmsg);
-        throwByName(env, ERRCLS, errmsg);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     return recvmsg;
 }
@@ -308,9 +284,17 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_recvbyte(
             return recvbytes;
         } else {
             //接上数据按接收长度重新生成char，防止出现多一个字符情况
-            char *recvbuf = new char[nbytes];
-            memcpy(recvbuf, (char *) buf, static_cast<size_t>(nbytes));
-            recvbytes = pCharTojbyteArr(env, recvbuf, nbytes);
+            //将定义的指针改为char数组，多次测试后现的用指针后获取的数据会有问题
+            char recvbuf[nbytes + 1];
+            //最后一位变为字符串结束符，如果不多定义一位最后为\0结束，转为字符串就会有问题
+            recvbuf[nbytes] = '\0';
+
+            memcpy(&recvbuf, (char *)buf, nbytes);
+            LOGD("byte:%d,%s", nbytes, (char *) buf);
+            LOGD("bnew:%d,%s", nbytes, recvbuf);
+
+            recvbytes = utils::pCharTojbyteArr(env, recvbuf, nbytes);
+
             int rc = nn_freemsg(buf);
             if (rc != 0) {
                 throw rc;
@@ -320,7 +304,7 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_recvbyte(
         char errmsg[100];
         sprintf(errmsg, "接收数据失败！返回码：%d", e);
         LOGE("%s\n", errmsg);
-        throwByName(env, ERRCLS, errmsg);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     return recvbytes;
 }
@@ -344,19 +328,18 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_subscribe(
         if (itype_ == 0) {
             subcount = nn_setsockopt(socketid_, NN_SUB, NN_SUB_SUBSCRIBE, prestr,
                                      static_cast<size_t>(str_len));
-        } else{
+        } else {
             subcount = nn_setsockopt(socketid_, NN_SUB, NN_SUB_UNSUBSCRIBE, prestr,
                                      static_cast<size_t>(str_len));
         }
         if (subcount < 0) {
-
             throw subcount;
         }
     } catch (int e) {
         char errmsg[100];
         sprintf(errmsg, "设置订阅前缀失败！返回码：%d", e);
         LOGE("%s\n", errmsg);
-        throwByName(env, ERRCLS, errmsg);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     return subcount;
 }
@@ -375,7 +358,7 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_subscribebyte(
     int bytelen = env->GetArrayLength(prebytearr_);
 
     //获取发送字符串
-    const char *prestr = jbyteArrTopChar(env, prebytearr_, bytelen);
+    const char *prestr = utils::jbyteArrTopChar(env, prebytearr_, bytelen);
     //计算发送字节长度
     int str_len = strlen(prestr);
     try {
@@ -383,7 +366,7 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_subscribebyte(
         if (itype_ == 0) {
             subcount = nn_setsockopt(socketid_, NN_SUB, NN_SUB_SUBSCRIBE, prestr,
                                      static_cast<size_t>(str_len));
-        } else{
+        } else {
             subcount = nn_setsockopt(socketid_, NN_SUB, NN_SUB_UNSUBSCRIBE, prestr,
                                      static_cast<size_t>(str_len));
         }
@@ -394,7 +377,7 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_subscribebyte(
         char errmsg[100];
         sprintf(errmsg, "设置订阅前缀失败！返回码：%d", e);
         LOGE("%s\n", errmsg);
-        throwByName(env, ERRCLS, errmsg);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     return subcount;
 }

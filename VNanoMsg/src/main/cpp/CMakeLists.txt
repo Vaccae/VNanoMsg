@@ -267,9 +267,10 @@ list(APPEND NN_SOURCES
         src/utils/efd_win.inc
         )
 
-#这里加入我们自己封装的的native-lib的cpp文件
+#这里加入我们自己封装的的native-lib和utils.cpp的cpp文件
 list(APPEND NN_SOURCES
         native-lib.cpp
+        utils/utils.cpp
         )
 
 # Creates and names a library, sets it as either STATIC

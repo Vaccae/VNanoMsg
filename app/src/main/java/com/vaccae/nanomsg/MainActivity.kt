@@ -3,6 +3,9 @@ package com.vaccae.nanomsg
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.vaccae.nanomsg.mvp.view.PipePullActivity
+import com.vaccae.nanomsg.mvp.view.REQREPActivity
+import com.vaccae.nanomsg.mvvm.view.PipePushActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -34,6 +37,16 @@ class MainActivity : AppCompatActivity() {
 
         btnSURVEY.setOnClickListener {
             intent = Intent(this, SURVEYActivity::class.java)
+            startActivity(intent)
+        }
+
+        btnPIPELinePush.setOnClickListener {
+            intent = Intent(this, PipePushActivity::class.java)
+            startActivity(intent)
+        }
+
+        btnPIPELinePull.setOnClickListener {
+            intent = Intent(this, PipePullActivity::class.java)
             startActivity(intent)
         }
 

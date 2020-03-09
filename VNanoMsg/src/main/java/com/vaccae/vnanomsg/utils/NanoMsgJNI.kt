@@ -33,9 +33,9 @@ class NanoMsgJNI {
     external fun sendbyte(connectsocket: Int, sendbytes: ByteArray): Int
 
     //接收数据
-    external fun recv(connectsocket: Int): String
+    external fun recv(connectsocket: Int): String?
 
-    external fun recvbyte(connectsocket: Int): ByteArray
+    external fun recvbyte(connectsocket: Int): ByteArray?
 
     //设置订单主题前缀
     external fun subscribe(connectsocket: Int, subs: String, itype: Int): Int

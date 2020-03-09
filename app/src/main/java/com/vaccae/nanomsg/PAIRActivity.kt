@@ -9,6 +9,14 @@ class PAIRActivity : AppCompatActivity() {
 
     private var nnpair: NNPAIR? = null
 
+    override fun onDestroy() {
+        super.onDestroy()
+        if (nnpair != null) {
+            nnpair.let {
+                it?.close()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
