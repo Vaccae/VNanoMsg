@@ -17,7 +17,7 @@
 	       maven { url 'https://jitpack.io' }
 	     }
 	  }
-	}
+	} 
 
 	dependencies {
 	    implementation 'com.github.Vaccae:VNanoMsg:1.0.2'
