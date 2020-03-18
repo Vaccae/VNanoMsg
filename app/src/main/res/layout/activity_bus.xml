@@ -22,7 +22,7 @@
             android:id="@+id/edtipadr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="tcp://192.168.66.248:8002" />
+            android:text="tcp://192.168.66.146:8002" />
     </LinearLayout>
 
     <LinearLayout

@@ -2,8 +2,10 @@ package com.vaccae.nanomsg
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
 import com.vaccae.vnanomsg.NNSURVEY
 import kotlinx.android.synthetic.main.activity_survey.*
+import kotlinx.coroutines.*
 
 class SURVEYActivity : AppCompatActivity() {
 
@@ -22,7 +24,10 @@ class SURVEYActivity : AppCompatActivity() {
                 try {
                     if (it?.connect(edtipadr.text.toString())!!) {
                         tvmsg.append("SURVEY连接成功！\r\n")
-                        RecvSURVEY()
+//                        RecvSURVEY()
+                        lifecycleScope.launch {
+                            RecvSurVeyasync()
+                        }
                     } else {
                         tvmsg.append("SURVEY连接失败！\r\n")
                     }
@@ -49,6 +54,35 @@ class SURVEYActivity : AppCompatActivity() {
                     tvmsg.append(recvmsg + "\r\n")
                 } catch (e: IllegalArgumentException) {
                     tvmsg.append(e.message.toString() + "\r\n")
+                }
+            }
+        }
+
+    }
+
+    //协程的使用
+    private suspend fun RecvSurVeyasync() {
+        var recvcount = 0;
+        //设置在什么线程中开启
+        withContext(Dispatchers.IO) {
+            while (true) {
+                delay(1000)
+                nnsurvey?.let {
+                    try {
+                        it.recvbyte()?.also { data ->
+                            val recvmsg = data.toString(charset = Charsets.UTF_8)
+                            //主线程同步
+                            MainScope().launch {
+                                tvmsg.append(recvmsg + "\r\n")
+                            }
+                        }
+                    } catch (e: IllegalArgumentException) {
+                        recvcount++;
+                        //主线程同步
+                        MainScope().launch {
+                            tvmsg.text = recvcount.toString()
+                        }
+                    }
                 }
             }
         }
