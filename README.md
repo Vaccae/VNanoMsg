@@ -20,7 +20,7 @@
 	}
 
 	dependencies {
-	    implementation 'com.github.Vaccae:VNanoMsg:1.0.1'
+	    implementation 'com.github.Vaccae:VNanoMsg:1.0.2'
 	}
 ```
 
@@ -188,6 +188,10 @@ var res = nn.unsubscribe("输入要取消订阅的主题字符串")
 ```
 
 ## 版本更新记录
+
+### 1.0.2版本
+1.把Nanomsg中原来改的SurVey的参数改了回来，用于解决通讯时接收不全的问题。
+2.SurVey例子中原来接收后开启的线程，改为了kotlin的协程方式，对协程的一个简单的学习。
 
 ### 1.0.1版本
 
