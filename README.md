@@ -20,7 +20,7 @@
 	} 
 
 	dependencies {
-	    implementation 'com.github.Vaccae:VNanoMsg:1.0.2'
+	    implementation 'com.github.Vaccae:VNanoMsg:1.0.3'
 	}
 ```
 
