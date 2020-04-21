@@ -122,7 +122,7 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_close(
     try {
         //关闭套接字
         closesocket = nn_close(socketid_);
-        if (closesocket != 1) {
+        if (closesocket < 0) {
             throw closesocket;
         }
 

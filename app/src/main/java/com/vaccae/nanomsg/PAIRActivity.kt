@@ -45,5 +45,21 @@ class PAIRActivity : AppCompatActivity() {
                 }
             }
         }
+
+        //关闭按钮
+        btnClose.setOnClickListener {
+            nnpair?.also {
+                try {
+                    if (it.close()) {
+                        tvmsg.append("PAIR关闭成功！\r\n")
+                    } else {
+                        tvmsg.append("PAIR关闭失败！\r\n")
+                    }
+                } catch (e: IllegalArgumentException) {
+                    tvmsg.append(e.message.toString() + "\r\n")
+                }
+            }
+            nnpair=null;
+        }
     }
 }

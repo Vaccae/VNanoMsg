@@ -29,7 +29,7 @@ interface NNBaseInf {
 
     //关闭
     fun close(): Boolean {
-        return nnjni.close(socketid) > 0
+        return nnjni.close(socketid) == 0
     }
 
     //发送数据
