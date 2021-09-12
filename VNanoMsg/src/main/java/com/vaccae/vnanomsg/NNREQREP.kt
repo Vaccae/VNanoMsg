@@ -12,4 +12,8 @@ class NNREQREP:NNBaseInf {
 
     override var socketid: Int = nnjni.init("REQREP")
 
+    override var bindid: Int = -1
+
+    override var connectid: Int = -1
+
 }

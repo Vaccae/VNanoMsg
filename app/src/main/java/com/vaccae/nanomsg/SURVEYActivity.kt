@@ -28,7 +28,7 @@ class SURVEYActivity : AppCompatActivity() {
                         lifecycleScope.launch {
                             RecvSurVeyasync()
                         }
-                    } else { 
+                    } else {
                         tvmsg.append("SURVEY连接失败！\r\n")
                     }
                 } catch (e: IllegalArgumentException) {
@@ -39,26 +39,32 @@ class SURVEYActivity : AppCompatActivity() {
 
         //发送按钮
         btnSend.setOnClickListener {
-            nnsurvey.let {
+            nnsurvey?.let {
                 try {
                     val input = edtinput.text.toString()
                     val bytes = input.toByteArray()
+                    var recvmsg: String? = null
                     //发送数据
-                    it?.send(bytes)
+                    var sendqty = it.send(bytes)
+                    tvmsg.post {
+                        tvmsg.append("发送数据$sendqty\r\n")
+                    }
+
                     //延时50毫秒
                     Thread.sleep(50)
                     //接收数据
                     val recvbyte = it?.recvbyte()
-                    val recvmsg = recvbyte?.toString(charset = Charsets.UTF_8)
-
-                    tvmsg.append(recvmsg + "\r\n")
+                    recvmsg = recvbyte?.toString(charset = Charsets.UTF_8)
+                    tvmsg.post {
+                        tvmsg.append("$recvmsg\r\n")
+                    }
                 } catch (e: IllegalArgumentException) {
                     tvmsg.append(e.message.toString() + "\r\n")
                 }
             }
         }
-
     }
+
 
     //协程的使用
     private suspend fun RecvSurVeyasync() {
@@ -75,6 +81,8 @@ class SURVEYActivity : AppCompatActivity() {
                             MainScope().launch {
                                 tvmsg.append(recvmsg + "\r\n")
                             }
+
+                            nnsurvey?.send("Android已收到！");
                         }
                     } catch (e: IllegalArgumentException) {
                         recvcount++;

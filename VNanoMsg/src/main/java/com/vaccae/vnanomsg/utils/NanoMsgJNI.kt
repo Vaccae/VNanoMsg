@@ -21,6 +21,9 @@ class NanoMsgJNI {
     //绑定地址
     external fun bind(connectsocket: Int, ipadr: String): Int
 
+    //从套接字中删除端点
+    external fun shundown(connectsocket: Int, bindid:Int):Int
+
     //关闭套接了
     external fun close(connectsocket: Int): Int
 

@@ -19,7 +19,7 @@ class REQREPActivity : AppCompatActivity(), TransContract.View {
         setContentView(R.layout.activity_reqrep)
 
         edtipadr.text = Editable.Factory.getInstance().newEditable(
-            NanoTrans.transurl + ":8003"
+            NanoTrans.transurl + ":5001"
         )
 
         reqRepPresenter = ReqRepPresenter(this)

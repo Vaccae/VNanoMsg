@@ -15,7 +15,8 @@ class PAIRActivity : AppCompatActivity() {
 
         //连接按钮
         btnConnent.setOnClickListener {
-            nnpair = nnpair ?: NNPAIR().also {
+            //nnpair = nnpair ?: NNPAIR().also {
+            nnpair = NNPAIR().also {
                 try {
                     if (it.connect(edtipadr.text.toString())) {
                         tvmsg.append("PAIR连接成功！\r\n")

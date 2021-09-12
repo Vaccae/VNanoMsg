@@ -12,4 +12,8 @@ class NNSURVEY : NNBaseInf {
 
     override var socketid = nnjni.init("SURVEY")
 
+    override var bindid: Int = -1
+
+    override var connectid: Int = -1
+
 }

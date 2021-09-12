@@ -58,6 +58,9 @@ jbyteArray utils::JstringtoJbyte(JNIEnv *env, jstring jstr) {
     return barr;
 }
 
+
+
+
 //抛异常
 void utils::throwByName(JNIEnv *env, const char *name, const char *msg) {
     jclass cls = env->FindClass(name);
@@ -70,4 +73,13 @@ void utils::throwByName(JNIEnv *env, const char *name, const char *msg) {
         env->ThrowNew(cls, msg);
     }
     env->DeleteLocalRef(cls);
+}
+
+//char*拼接
+char *utils::CharCat(const char *char1, const char *char2) {
+    const size_t len = strlen(char1)+strlen(char2);
+    char *res_str = new char(len + 1);
+    strcpy(res_str,char1);
+    strcat(res_str,char2);
+    return res_str;
 }

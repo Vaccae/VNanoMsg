@@ -20,7 +20,7 @@
 	} 
 
 	dependencies {
-	    implementation 'com.github.Vaccae:VNanoMsg:1.0.3'
+	    implementation 'com.github.Vaccae:VNanoMsg:1.0.4'
 	}
 ```
 
@@ -188,6 +188,9 @@ var res = nn.unsubscribe("输入要取消订阅的主题字符串")
 ```
 
 ## 版本更新记录
+
+### 1.0.4版本
+加入了nn.shundownbind()和nn.shundownconnect()两个函数，用于从套接字中删除端点。
 
 ### 1.0.3版本
 修复了nn.close()中总是提示关闭套接字失败的问题。

@@ -9,6 +9,10 @@ package com.vaccae.vnanomsg
 class NNPIPEPUSH : NNBaseInf {
     override var socketid = nnjni.init("PIPEPUSH")
 
+    override var bindid: Int = -1
+
+    override var connectid: Int = -1
+
     override fun recv(): String {
         return ""
     }

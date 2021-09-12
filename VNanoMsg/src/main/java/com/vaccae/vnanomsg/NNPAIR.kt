@@ -12,4 +12,7 @@ class NNPAIR : NNBaseInf {
 
     override var socketid: Int = nnjni.init("PAIR")
 
+    override var bindid: Int = -1
+
+    override var connectid: Int = -1
 }

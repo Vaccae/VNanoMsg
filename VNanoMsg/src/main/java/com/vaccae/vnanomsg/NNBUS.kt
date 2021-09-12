@@ -8,4 +8,8 @@ package com.vaccae.vnanomsg
  */
 class NNBUS : NNBaseInf {
     override var socketid: Int = nnjni.init("BUS")
+
+    override var bindid: Int = -1
+
+    override var connectid: Int = -1
 }

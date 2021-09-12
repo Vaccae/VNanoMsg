@@ -12,6 +12,10 @@ class NNPUBSUB :NNBaseInf {
 
     override var socketid: Int = nnjni.init("PUBSUB")
 
+    override var bindid: Int = -1
+
+    override var connectid: Int = -1
+
     //设置订阅前缀
     fun subscribe(string: String): Int {
         return nnjni.subscribe(socketid, string,0)

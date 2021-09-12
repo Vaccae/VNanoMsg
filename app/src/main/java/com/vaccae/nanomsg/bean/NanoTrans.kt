@@ -9,7 +9,7 @@ package com.vaccae.nanomsg.bean
 class NanoTrans {
     companion object{
         //通讯地址
-        var transurl = "tcp://192.168.66.146"
+        var transurl = "tcp://192.168.10.233"
     }
 
 }

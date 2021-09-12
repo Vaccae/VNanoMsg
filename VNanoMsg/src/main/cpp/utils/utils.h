@@ -27,6 +27,9 @@ public:
     //jstring 转为jbyte*
     static jbyteArray JstringtoJbyte(JNIEnv *env, jstring jstr);
 
+    //char*拼接
+    static char* CharCat(const char* char1, const char* char2);
+
     //抛异常函数
     static void throwByName(JNIEnv *env, const char *name, const char *msg);
 };

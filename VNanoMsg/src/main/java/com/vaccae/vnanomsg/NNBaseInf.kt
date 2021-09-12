@@ -16,20 +16,42 @@ interface NNBaseInf {
     //对应的返回实列
     var socketid: Int
 
+    //如果是bind有返回地址，在shundown中有用
+    var bindid: Int
+
+    //连接ID
+    var connectid :Int
+
     //绑定
     fun bind(ipadr: String): Boolean {
-        return nnjni.bind(socketid, ipadr) >= 0
+        val res = nnjni.bind(socketid, ipadr)
+        if (res >= 0) {
+            bindid = res
+        }
+        return res >= 0
     }
 
     //连接
     fun connect(ipadr: String): Boolean {
         val res = nnjni.connect(socketid, ipadr)
+        if (res >= 0) {
+            connectid = res
+        }
         return res >= 0
     }
 
     //关闭
     fun close(): Boolean {
         return nnjni.close(socketid) == 0
+    }
+
+    //shutdown
+    fun shutdownbind():Boolean{
+        return nnjni.shundown(socketid,bindid) ==0
+    }
+
+    fun shutdownconnect():Boolean{
+        return nnjni.shundown(socketid,connectid) ==0
     }
 
     //发送数据
