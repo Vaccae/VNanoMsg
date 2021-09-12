@@ -28,7 +28,7 @@ class SURVEYActivity : AppCompatActivity() {
                         lifecycleScope.launch {
                             RecvSurVeyasync()
                         }
-                    } else {
+                    } else { 
                         tvmsg.append("SURVEY连接失败！\r\n")
                     }
                 } catch (e: IllegalArgumentException) {
