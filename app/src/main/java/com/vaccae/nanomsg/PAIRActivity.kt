@@ -18,10 +18,15 @@ class PAIRActivity : AppCompatActivity() {
             //nnpair = nnpair ?: NNPAIR().also {
             nnpair = NNPAIR().also {
                 try {
-                    if (it.connect(edtipadr.text.toString())) {
-                        tvmsg.append("PAIR连接成功！\r\n")
+//                    if (it.connect(edtipadr.text.toString())) {
+//                        tvmsg.append("PAIR连接成功！\r\n")
+//                    } else {
+//                        tvmsg.append("PAIR连接失败！\r\n")
+//                    }
+                    if (it.bind("tcp:192.168.10.151:8157")) {
+                        tvmsg.append("PAIR绑定成功！\r\n")
                     } else {
-                        tvmsg.append("PAIR连接失败！\r\n")
+                        tvmsg.append("PAIR绑定失败！\r\n")
                     }
                 } catch (e: IllegalArgumentException) {
                     tvmsg.append(e.message.toString() + "\r\n")

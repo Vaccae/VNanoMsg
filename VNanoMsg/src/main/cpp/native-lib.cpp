@@ -73,9 +73,9 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_init(
         char errmsg[100];
         sprintf(errmsg, "创建Socket连接失败，返回码：%d", e);
         LOGE("%s\n", errmsg);
-        const char* strerror =nn_strerror(e);
-        char* resmsg = utils::CharCat(errmsg,strerror);
-        utils::throwByName(env, ERRCLS, resmsg);
+//        const char* strerror =nn_strerror(e);
+//        char* resmsg = utils::CharCat(errmsg,strerror);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     //释放资源
     env->ReleaseStringUTFChars(ntype_, ntype);
@@ -106,9 +106,9 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_bind(
         char errmsg[100];
         sprintf(errmsg, "绑定地址失败，返回码：%d", e);
         LOGE("%s\n", errmsg);
-        const char* strerror =nn_strerror(e);
-        char* resmsg = utils::CharCat(errmsg,strerror);
-        utils::throwByName(env, ERRCLS, resmsg);
+//        const char* strerror =nn_strerror(e);
+//        char* resmsg = utils::CharCat(errmsg,strerror);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     //释放资源
 //    env->ReleaseStringUTFChars(ipadr_, ipadress);
@@ -134,9 +134,9 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_close(
         char errmsg[100];
         sprintf(errmsg, "关闭套接字失败，返回码：%d", e);
         LOGE("%s\n", errmsg);
-        const char* strerror =nn_strerror(e);
-        char* resmsg = utils::CharCat(errmsg,strerror);
-        utils::throwByName(env, ERRCLS, resmsg);
+//        const char* strerror =nn_strerror(e);
+//        char* resmsg = utils::CharCat(errmsg,strerror);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     return closesocket;
 }
@@ -163,9 +163,9 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_connect(
         char errmsg[100];
         sprintf(errmsg, "连接服务器失败，返回码：%d", e);
         LOGE("%s\n", errmsg);
-        const char* strerror =nn_strerror(e);
-        char* resmsg = utils::CharCat(errmsg,strerror);
-        utils::throwByName(env, ERRCLS, resmsg);
+//        const char* strerror =nn_strerror(e);
+//        char* resmsg = utils::CharCat(errmsg,strerror);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     //释放资源
     env->ReleaseStringUTFChars(ipadr_, ipadress);
@@ -196,9 +196,9 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_send(
         char errmsg[100];
         sprintf(errmsg, "程序发送数据失败！返回码：%d", e);
         LOGE("%s\n", errmsg);
-        const char* strerror =nn_strerror(e);
-        char* resmsg = utils::CharCat(errmsg,strerror);
-        utils::throwByName(env, ERRCLS, resmsg);
+//        const char* strerror =nn_strerror(e);
+//        char* resmsg = utils::CharCat(errmsg,strerror);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     //释放资源
     env->ReleaseStringUTFChars(sendmsg_, sendmsg);
@@ -227,12 +227,12 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_sendbyte(
             throw count;
         }
     } catch (int e) {
-        char errmsg[100];
+        char errmsg[500];
         sprintf(errmsg, "程序发送数据失败！返回码：%d", e);
         LOGE("%s\n", errmsg);
-        const char* strerror =nn_strerror(e);
-        char* resmsg = utils::CharCat(errmsg,strerror);
-        utils::throwByName(env, ERRCLS, resmsg);
+//        const char* strerror =nn_strerror(e);
+//        char* resmsg = utils::CharCat(errmsg,strerror);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     return count;
 }
@@ -275,9 +275,9 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_recv(
         char errmsg[100];
         sprintf(errmsg, "接收数据失败！返回码：%d", e);
         LOGE("%s\n", errmsg);
-        const char* strerror =nn_strerror(e);
-        char* resmsg = utils::CharCat(errmsg,strerror);
-        utils::throwByName(env, ERRCLS, resmsg);
+//        const char* strerror =nn_strerror(e);
+//        char* resmsg = utils::CharCat(errmsg,strerror);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     return recvmsg;
 }
@@ -319,9 +319,9 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_recvbyte(
         char errmsg[100];
         sprintf(errmsg, "接收数据失败！返回码：%d", e);
         LOGE("%s\n", errmsg);
-        const char* strerror =nn_strerror(e);
-        char* resmsg = utils::CharCat(errmsg,strerror);
-        utils::throwByName(env, ERRCLS, resmsg);
+//        const char* strerror =nn_strerror(e);
+//        char* resmsg = utils::CharCat(errmsg,strerror);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     return recvbytes;
 }
@@ -356,9 +356,9 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_subscribe(
         char errmsg[100];
         sprintf(errmsg, "设置订阅前缀失败！返回码：%d", e);
         LOGE("%s\n", errmsg);
-        const char* strerror =nn_strerror(e);
-        char* resmsg = utils::CharCat(errmsg,strerror);
-        utils::throwByName(env, ERRCLS, resmsg);
+//        const char* strerror =nn_strerror(e);
+//        char* resmsg = utils::CharCat(errmsg,strerror);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     return subcount;
 }
@@ -396,9 +396,9 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_subscribebyte(
         char errmsg[100];
         sprintf(errmsg, "设置订阅前缀失败！返回码：%d", e);
         LOGE("%s\n", errmsg);
-        const char* strerror =nn_strerror(e);
-        char* resmsg = utils::CharCat(errmsg,strerror);
-        utils::throwByName(env, ERRCLS, resmsg);
+//        const char* strerror =nn_strerror(e);
+//        char* resmsg = utils::CharCat(errmsg,strerror);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     return subcount;
 }
@@ -419,9 +419,9 @@ Java_com_vaccae_vnanomsg_utils_NanoMsgJNI_shundown(JNIEnv *env, jobject thiz, ji
         char errmsg[100];
         sprintf(errmsg, "从套接字中删除端点失败，返回码：%d", e);
         LOGE("%s\n", errmsg);
-        const char* strerror =nn_strerror(e);
-        char* resmsg = utils::CharCat(errmsg,strerror);
-        utils::throwByName(env, ERRCLS, resmsg);
+//        const char* strerror =nn_strerror(e);
+//        char* resmsg = utils::CharCat(errmsg,strerror);
+        utils::throwByName(env, ERRCLS, errmsg);
     }
     return shundownsocket;
 }

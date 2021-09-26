@@ -70,6 +70,8 @@ void utils::throwByName(JNIEnv *env, const char *name, const char *msg) {
             //清除异常堆栈
             env->ExceptionClear();
         }
+        char errmsg[500];
+        sprintf(errmsg, "throwByName：%d", msg);
         env->ThrowNew(cls, msg);
     }
     env->DeleteLocalRef(cls);
